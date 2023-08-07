@@ -24,7 +24,7 @@ def main(config):
     with open('./data/train_scale_max_dict.pickle', 'rb') as f:
         scale_max_dict = pickle.load(f)
 
-    device = torch.device("cuda")
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps")
     seed_everything(config)
     train_data, sales_data, submit_data = DLinear.read_data(config)
 
