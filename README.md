@@ -3,7 +3,7 @@
 - Reference Paper [Are Transformers Effective for Time Series Forecasting?(AAAI 2023)](https://arxiv.org/pdf/2205.13504.pdf)
 
 ## LTSF-Linear Family
-[image](./pics/Linear.png)
+![image](./pics/Linear.png)
 LTSF-Linear is a set of linear models.
 
 Linear: It is just a one-layer linear model, but it outperforms Transformers.
