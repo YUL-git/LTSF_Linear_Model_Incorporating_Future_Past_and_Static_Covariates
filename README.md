@@ -1,0 +1,2 @@
+# LTSF_DLinear_Model_Incorporating_Future_Past_and_Static_Covariates
+Implementaion of the LTSF-DLinear Model Incorporating Future Past and Static Covariates
