@@ -115,11 +115,11 @@ class DLinearModel(nn.Module):
 
         if self.future_cov_dim != 0:
             # future covariates layer acts on time steps independently
-            self.lienar_fut_cov = _create_linear_layer(                     # 년도, 월, 일 // 안주는게 나을 수도
+            self.linear_fut_cov = _create_linear_layer(                     # 년도, 월, 일 // 안주는게 나을 수도
                 self.future_cov_dim, self.output_dim
             )
         if self.static_cov_dim != 0:
-            self.lienar_static_cov = _create_linear_layer(
+            self.linear_static_cov = _create_linear_layer(
                 layer_in_dim_static_cov, layer_out_dim
             )
     
@@ -130,7 +130,7 @@ class DLinearModel(nn.Module):
             '(n_samples, n_time_steps, n_variables)"
         """
         x, x_future, x_static = x_in
-        batch, _, _ = x.shaep
+        batch, _, _ = x.shape
 
         if self.shared_weights:
             # discard covariates, to ensure that in_dim == out_dim
@@ -178,7 +178,7 @@ class DLinearModel(nn.Module):
                 )
             
             if self.static_cov_dim != 0:
-                static_cov_output = self.lienar_static_cov(x_static.reshape(batch, -1))
+                static_cov_output = self.linear_static_cov(x_static.reshape(batch, -1))
                 x = x + static_cov_output.view(
                     batch, self.output_chunk_length, self.output_dim
                 )

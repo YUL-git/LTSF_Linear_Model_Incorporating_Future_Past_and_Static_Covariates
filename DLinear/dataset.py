@@ -94,22 +94,20 @@ def make_test_data(train_data, sales_data, submit_data, config):
 
     x_past = np.empty((num_rows, input_chunk_length, 5))
     x_future = np.empty((num_rows, output_chunk_length, 3))
-    x_static = np.empty((num_rows, num_rows, 4))
+    x_static = np.empty((num_rows, 4))
+
+    past_year = past_date_index.year[-input_chunk_length:]
+    past_month = past_date_index.month[-input_chunk_length:]
+    past_day = past_date_index.day[-input_chunk_length:]
+    future_year = future_date_index.year
+    future_month = future_date_index.month 
+    future_day = future_date_index.day
     static_cov = np.array(train_data.iloc[:, :4])
 
     for i in tqdm(range(num_rows)):
         sales_volume =  np.array(train_data.iloc[i, -input_chunk_length:])
         daily_sales = np.array(sales_data.iloc[i, -input_chunk_length:])
-        past_year = past_date_index.year[-input_chunk_length:]
-        past_month = past_date_index.month[-input_chunk_length:]
-        past_day = past_date_index.day[-input_chunk_length:]
-        #
-        future_year = future_date_index.year
-        future_month = future_date_index.month 
-        future_day = future_date_index.day
-        #
-    
-        
+
         past_data = np.column_stack((
             sales_volume,
             daily_sales,
@@ -117,7 +115,6 @@ def make_test_data(train_data, sales_data, submit_data, config):
             past_month,
             past_day
         ))
-
 
         future_data = np.column_stack((
             future_year,
@@ -127,9 +124,11 @@ def make_test_data(train_data, sales_data, submit_data, config):
 
         x_past[i] = past_data
         x_future[i] = future_data
+
     x_static = static_cov
 
     return x_past, x_future, x_static
+
 
 
 ################################################################################################
