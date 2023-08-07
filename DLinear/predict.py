@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-import tqdm.auto as tqdm
+from tqdm.auto import tqdm
 
 def inference(model, test_loader, device):
     predictions = []

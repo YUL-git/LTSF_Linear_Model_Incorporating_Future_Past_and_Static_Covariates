@@ -38,7 +38,7 @@ def train(model, optimizer, scheduler, train_loader, val_loader, device, config)
             print('Model Saved')
             if epoch >= 10:
                 model_save_path = config["model_save_path"]
-                model_file_name = f"{epoch}_GRU.pth"
+                model_file_name = f"{epoch}_DLinear.pth"
                 full_path = os.path.join(model_save_path, model_file_name)
                 torch.save(best_model.state_dict(), full_path)
         scheduler.step()
