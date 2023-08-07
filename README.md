@@ -1,6 +1,8 @@
 # Are Transformers Effective for Time Series Forecasting? (AAAI 2023)
-- Implementaion of the LTSF-DLinear Model Incorporating Future Past and Static Covariates
+- "Implementaion of the LTSF-DLinear Model Incorporating Future Past and Static Covariates"
+- "Code Implementation for AI Competitions: Enhancing DLinear Model with Multivariate Forecasting and Covariates"
 - Reference Paper [Are Transformers Effective for Time Series Forecasting?(AAAI 2023)](https://arxiv.org/pdf/2205.13504.pdf)
+
 
 ## LTSF-Linear Family
 ![image](./pics/Linear.png)
