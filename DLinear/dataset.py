@@ -108,7 +108,7 @@ def make_test_data(
         future_month = future_date_index.month 
         future_day = future_date_index.day
         #
-        static_cov = np.array(train_data.iloc[:, 4:])
+        static_cov = np.array(train_data.iloc[:, :4])
         
         past_data = np.column_stack((
             sales_volume,
