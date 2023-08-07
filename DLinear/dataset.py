@@ -96,7 +96,7 @@ def make_test_data(train_data, sales_data, submit_data, config):
     x_future = np.empty((num_rows, output_chunk_length, 3))
     x_static = np.empty((num_rows, num_rows, 4))
     static_cov = np.array(train_data.iloc[:, :4])
-    
+
     for i in tqdm(range(num_rows)):
         sales_volume =  np.array(train_data.iloc[i, -input_chunk_length:])
         daily_sales = np.array(sales_data.iloc[i, -input_chunk_length:])
@@ -153,6 +153,6 @@ class CustomDataset(Dataset):
     
     def __getitem__(self, idx):
         if self.Y is not None:
-            return torch.Tensor(self.x_past[idx]), torch.Tensor(self.x_future[idx]), torch.Tensor(self.x_static[idx]), torch.Tensor(self.Y[idx])
-        return torch.Tensor(self.x_past[idx]), torch.Tensor(self.x_future[idx]), torch.Tensor(self.x_static[idx])
+            return (torch.Tensor(self.x_past[idx]), torch.Tensor(self.x_future[idx]), torch.Tensor(self.x_static[idx])), torch.Tensor(self.Y[idx])
+        return (torch.Tensor(self.x_past[idx]), torch.Tensor(self.x_future[idx]), torch.Tensor(self.x_static[idx]))
 

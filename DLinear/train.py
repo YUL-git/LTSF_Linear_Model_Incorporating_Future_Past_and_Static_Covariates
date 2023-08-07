@@ -16,7 +16,7 @@ def train(model, optimizer, scheduler, train_loader, val_loader, device, config)
         train_loss = []
         train_mae = []
         for X, Y in tqdm(iter(train_loader)):
-            X = X.to(device)
+            X = tuple(map(lambda x: x.to(device), X))
             Y = Y.to(device)
 
             optimizer.zero_grad()

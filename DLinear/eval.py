@@ -8,7 +8,7 @@ def validation(model, val_loader, criterion, device):
 
     with torch.no_grad():
         for X, Y in tqdm(iter(val_loader)):
-            X = X.to(device)
+            X = tuple(map(lambda x: x.to(device), X))
             Y = Y.to(device)
 
             output = model(X)
