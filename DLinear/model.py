@@ -184,5 +184,5 @@ class DLinearModel(nn.Module):
                 )
             
             #
-            x = x.view(batch, self.output_chunk_length, self.output_dim)    # (배치 사이즈, 예측 기간, 일별 판매량) 반환
+            x = torch.squeeze(x, dim=2)   # (배치 사이즈, 예측 기간, 일별 판매량) 반환
         return x
