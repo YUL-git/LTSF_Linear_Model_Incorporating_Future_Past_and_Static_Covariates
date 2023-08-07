@@ -36,7 +36,7 @@ def train(model, optimizer, scheduler, train_loader, val_loader, device, config)
             best_loss = val_loss
             best_model = model
             print('Model Saved')
-            if epoch >= 8:
+            if epoch >= 10:
                 model_save_path = config["model_save_path"]
                 model_file_name = f"{epoch}_GRU.pth"
                 full_path = os.path.join(model_save_path, model_file_name)

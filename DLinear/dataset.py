@@ -53,14 +53,14 @@ def make_train_data(train_data, sales_data, config):
     month = date_index.month.values
     day = date_index.day.values
 
-    for i in tqdm(range(num_rows)):
-        sales_volume =  np.array(train_data.iloc[i, 4:])
-        daily_sales = np.array(sales_data.iloc[i, :])
-        static_cov = np.array(train_data.iloc[i, :4])
+    sales_volume =  np.array(train_data.iloc[:, 4:])
+    daily_sales = np.array(sales_data)
+    static_cov = np.array(train_data.iloc[:, :4])
 
+    for i in tqdm(range(num_rows)):
         for j in range(time_length - window_size + 1):
-            target_window = sales_volume[j : j + window_size]
-            past_cov_window = daily_sales[j : j + window_size]
+            target_window = sales_volume[i, j : j + window_size]
+            past_cov_window = daily_sales[i, j : j + window_size]
 
             past_data = np.column_stack((
                 target_window[:input_chunk_length],
@@ -78,10 +78,11 @@ def make_train_data(train_data, sales_data, config):
 
             x_past[i * (time_length - window_size + 1) + j] = past_data
             x_future[i * (time_length - window_size + 1) + j] = future_data
-            x_static[i * (time_length - window_size + 1) + j] = static_cov
+            x_static[i * (time_length - window_size + 1) + j] = static_cov[i]
             y_target[i * (time_length - window_size + 1) + j] = target_window[input_chunk_length:]
     
     return x_past, x_future, x_static, y_target
+
 
 
 def make_test_data(train_data, sales_data, submit_data, config):

@@ -82,7 +82,7 @@ if __name__ == "__main__":
     parser.add_argument("--kernel_size", type=int, default=25)
     parser.add_argument("--lr", type=int, default=1e-4)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--model_save_path", default="./best_model_gru_2/")
+    parser.add_argument("--model_save_path", default="./best_model/")
     parser.add_argument("--data_path", default="./data/")
     parser.add_argument("--train_file", default="train_data.csv")
     parser.add_argument("--sales_file", default="sales_data.csv")
@@ -110,5 +110,5 @@ if __name__ == "__main__":
         "submit_file": args.submit_file,
         "submission_path": args.submission_path
     }
-    
+    print(config)
     main(config)
