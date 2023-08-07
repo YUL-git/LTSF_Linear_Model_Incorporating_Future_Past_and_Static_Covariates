@@ -39,10 +39,10 @@ def main(config):
     train_dataset = DLinear.CustomDataset(train_x_past, train_x_future, train_x_static, train_x_target)
     train_loader = DataLoader(train_dataset, batch_size = config['batch_size'], shuffle=True, num_workers=0)
 
-    val_dataset = DLinear.CustomDataset(val_x_future, val_x_static, val_x_target)
+    val_dataset = DLinear.CustomDataset(val_x_past, val_x_future, val_x_static, val_x_target)
     val_loader = DataLoader(val_dataset, batch_size = config['batch_size'], shuffle=False, num_workers=0)
 
-    test_dataset = DLinear.CustomDataset(test_x_past, test_x_future, test_x_static)
+    test_dataset = DLinear.CustomDataset(test_x_past, test_x_future, test_x_static, None)
     test_loader = DataLoader(test_dataset, batch_size = config['batch_size'], shuffle=False, num_workers=0)
 
     model = DLinearModel(config, shared_wights=False, const_init=True)

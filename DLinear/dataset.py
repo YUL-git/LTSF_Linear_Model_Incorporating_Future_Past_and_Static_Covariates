@@ -30,9 +30,7 @@ def read_data(config):
     
     return train_data, sales_data, submit
 
-def make_train_data(
-        train_data, sales_data, config
-):
+def make_train_data(train_data, sales_data, config):
     """
     x_past = (샘플 개수, input_chunk_length, target(판매량)+past_covariates(일매출)+historical_future_covariates(년+월+일)) => (샘플 개수, 90,5)
     x_future = (샘플 개수, input_chunk_length, future_covariates(년+월+일)) => (샘플 개수, 90,3)
@@ -43,49 +41,50 @@ def make_train_data(
     output_chunk_length=21
     num_rows = len(train_data)
     window_size = input_chunk_length + output_chunk_length
-    time_lenght = 459
+    time_length = 459
 
-    x_past = np.empty((num_rows * (time_lenght - window_size + 1), input_chunk_length, 5))
-    x_future = np.empty((num_rows * (time_lenght - window_size + 1), output_chunk_length, 3))
-    x_static = np.empty((num_rows * (time_lenght - window_size + 1), 4))
-    y_target = np.empty((num_rows * (time_lenght - window_size + 1), output_chunk_length))
+    x_past = np.empty((num_rows * (time_length - window_size + 1), input_chunk_length, 5))
+    x_future = np.empty((num_rows * (time_length - window_size + 1), output_chunk_length, 3))
+    x_static = np.empty((num_rows * (time_length - window_size + 1), 4))
+    y_target = np.empty((num_rows * (time_length - window_size + 1), output_chunk_length))
 
     date_index = pd.DatetimeIndex(sales_data.transpose().index)
+    year = date_index.year.values
+    month = date_index.month.values
+    day = date_index.day.values
 
     for i in tqdm(range(num_rows)):
-        #
         sales_volume =  np.array(train_data.iloc[i, 4:])
         daily_sales = np.array(sales_data.iloc[i, :])
         static_cov = np.array(train_data.iloc[i, :4])
 
-        for j in range(time_lenght - window_size + 1):
+        for j in range(time_length - window_size + 1):
             target_window = sales_volume[j : j + window_size]
             past_cov_window = daily_sales[j : j + window_size]
-            date_window = date_index[j : j + window_size]
 
             past_data = np.column_stack((
                 target_window[:input_chunk_length],
                 past_cov_window[:input_chunk_length],
-                date_window.year[:input_chunk_length],
-                date_window.month[:input_chunk_length],
-                date_window.day[:input_chunk_length]
+                year[j : j + input_chunk_length],
+                month[j : j + input_chunk_length],
+                day[j : j + input_chunk_length]
             ))
 
             future_data = np.column_stack((
-                date_window.year[input_chunk_length:],
-                date_window.month[input_chunk_length:],
-                date_window.day[input_chunk_length:]
+                year[j + input_chunk_length : j + window_size],
+                month[j + input_chunk_length : j + window_size],
+                day[j + input_chunk_length : j + window_size]
             ))
 
-            x_past[i * (time_lenght - window_size + 1) + j] = past_data
-            x_future[i * (time_lenght - window_size + 1) + j] = future_data
-            x_static[i * (time_lenght - window_size + 1) + j] = static_cov
-            y_target[i * (time_lenght - window_size + 1) + j] = target_window[input_chunk_length:]
+            x_past[i * (time_length - window_size + 1) + j] = past_data
+            x_future[i * (time_length - window_size + 1) + j] = future_data
+            x_static[i * (time_length - window_size + 1) + j] = static_cov
+            y_target[i * (time_length - window_size + 1) + j] = target_window[input_chunk_length:]
     
     return x_past, x_future, x_static, y_target
 
-def make_test_data(
-        train_data, sales_data, submit_data, config):
+
+def make_test_data(train_data, sales_data, submit_data, config):
     input_chunk_length = config["input_chunk_length"]
     output_chunk_length = config["output_chunk_length"]
     
@@ -95,8 +94,9 @@ def make_test_data(
 
     x_past = np.empty((num_rows, input_chunk_length, 5))
     x_future = np.empty((num_rows, output_chunk_length, 3))
-    x_static = np.empty((num_rows, 4))
-
+    x_static = np.empty((num_rows, num_rows, 4))
+    static_cov = np.array(train_data.iloc[:, :4])
+    
     for i in tqdm(range(num_rows)):
         sales_volume =  np.array(train_data.iloc[i, -input_chunk_length:])
         daily_sales = np.array(sales_data.iloc[i, -input_chunk_length:])
@@ -108,7 +108,7 @@ def make_test_data(
         future_month = future_date_index.month 
         future_day = future_date_index.day
         #
-        static_cov = np.array(train_data.iloc[:, :4])
+    
         
         past_data = np.column_stack((
             sales_volume,
@@ -127,7 +127,7 @@ def make_test_data(
 
         x_past[i] = past_data
         x_future[i] = future_data
-        x_static[i] = static_cov
+    x_static = static_cov
 
     return x_past, x_future, x_static
 
