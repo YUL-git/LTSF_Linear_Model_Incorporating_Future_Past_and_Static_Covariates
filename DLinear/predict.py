@@ -7,7 +7,7 @@ def inference(model, test_loader, device):
 
     with torch.no_grad():
         for X in tqdm(iter(test_loader)):
-            X = X.to(device)
+            X = tuple(map(lambda x: x.to(device), X))
 
             output = model(X)
 
