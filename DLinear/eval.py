@@ -1,4 +1,4 @@
-import tqdm.auto as tqdm
+from tqdm.auto import tqdm
 import numpy as np
 import torch
 

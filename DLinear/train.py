@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import tqdm.auto as tqdm
+from tqdm.auto import tqdm
 from .eval import validation
 import torch
 import torch.nn as nn
