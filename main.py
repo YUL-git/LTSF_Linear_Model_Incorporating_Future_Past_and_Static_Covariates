@@ -45,7 +45,7 @@ def main(config):
     test_dataset = DLinear.CustomDataset(test_x_past, test_x_future, test_x_static, None)
     test_loader = DataLoader(test_dataset, batch_size = config['batch_size'], shuffle=False, num_workers=0)
 
-    model = DLinearModel(config, shared_wights=False, const_init=True)
+    model = DLinearModel(config, shared_weights=False, const_init=True)
     lambda1 = lambda epoch: 0.95 ** epoch
     optimizer = torch.optim.Adam(params = model.parameters(), lr = config["learning_rate"])
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=[lambda1])
