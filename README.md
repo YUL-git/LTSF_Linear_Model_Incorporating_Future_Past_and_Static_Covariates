@@ -2,15 +2,16 @@
 - "Implementaion of the LTSF-DLinear Model Incorporating Future Past and Static Covariates"
 - "Code Implementation for AI Competitions: Enhancing DLinear Model with Multivariate Forecasting and Covariates"
 - Reference Paper [Are Transformers Effective for Time Series Forecasting?(AAAI 2023)](https://arxiv.org/pdf/2205.13504.pdf)
-
-## Cautions
-- My implementation is primarily tailored for an AI challenge. Please feel free to modify it to better suit your specific needs.
-- The DLinear.py is inspired by [Darts](https://unit8co.github.io/darts/). It's the core component of this project, so I highly recommend taking a closer look!
-
+  
+## Cautions  
+- My implementation is primarily tailored for an AI challenge. Please feel free to modify it to better suit your specific needs.  
+- The DLinear.py is inspired by [Darts](https://unit8co.github.io/darts/). It's the core component of this project, so I highly recommend taking a closer look!  
+- I'm now implementing NLinear model for various covariates.  
+  
 ## LTSF-Linear Family
 ![image](./pics/Linear.png)
 LTSF-Linear is a set of linear models.
-
+  
 Linear: It is just a one-layer linear model, but it outperforms Transformers.
 * NLinear: To boost the performance of Linear when there is a distribution shift in the dataset, NLinear first subtracts the input by the last value of the sequence. Then, the input goes through a linear layer, and the subtracted part is added back before making the final prediction. The subtraction and addition in NLinear are a simple normalization for the input sequence.
 * DLinear: It is a combination of a Decomposition scheme used in Autoformer and FEDformer with linear layers. It first decomposes a raw data input into a trend component by a moving average kernel and a remainder (seasonal) component. Then, two one-layer linear layers are applied to each component and we sum up the two features to get the final prediction. By explicitly handling trend, DLinear enhances the performance of a vanilla linear when there is a clear trend in the data.
@@ -36,5 +37,9 @@ LTSF_DLinear
 │   └── visualizer.py    # visualize time series forecasting  
 │  
 └── main.py              # run for following parser you select
+```
+### For Run
+```bash
+python ./Linear/main.py
 ```
 
