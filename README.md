@@ -22,14 +22,16 @@ Easy-to-use: LTSF-Linear can be obtained easily without tuning model hyper-param
 ```bash
 LTSF_DLinear  
 │  
-├── DLinear/             # DLinear files  
+├── Linear/             # DLinear files  
 │   ├── __init__.py      # Main script  
 │   ├── dataset.py       # preprocessing datasets  
 │   ├── eval.py          # evaluation function  
-│   ├── model.py         # DLinear model  
+│   ├── DLinear.py         # DLinear model  
+│   ├── NLinear.py         # NLinear model  
 │   ├── predict.py       # predict function for submission  
 │   ├── train.py         # train DLinear model  
 │   └── visualizer.py    # visualize time series forecasting  
 │  
 └── main.py              # run for following parser you select
-```  
+```
+
