@@ -94,12 +94,16 @@ class DLinearModel(nn.Module):
         self.shared_weights = shared_weights
 
         def _create_linear_layer(in_dim, out_dim):
-            layer = nn.Linear(in_dim, out_dim)
+            layer = nn.Sequential(
+                nn.Linear(in_dim, out_dim),
+                nn.ReLU(inplace=True)  # ReLU 활성화 함수 추가
+            )
             if self.const_init:
-                layer.weight = nn.Parameter(
-                    (1.0 / in_dim) * torch.ones(layer.weight.shape)
+                layer[0].weight = nn.Parameter(
+                    (1.0 / in_dim) * torch.ones(layer[0].weight.shape)
                 )
             return layer
+
         
         if self.shared_weights:                                         # False로 할 거임
             layer_in_dim = self.input_chunk_length
