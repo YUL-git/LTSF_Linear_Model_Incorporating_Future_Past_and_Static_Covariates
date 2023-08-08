@@ -24,7 +24,7 @@ Easy-to-use: LTSF-Linear can be obtained easily without tuning model hyper-param
 
 ## Files  
 ```bash
-LTSF_DLinear  
+LTSF_Linear  
 │  
 ├── Linear/             # DLinear files  
 │   ├── __init__.py      # Main script  
