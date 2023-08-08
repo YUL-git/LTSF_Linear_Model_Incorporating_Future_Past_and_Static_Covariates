@@ -3,6 +3,9 @@
 - "Code Implementation for AI Competitions: Enhancing DLinear Model with Multivariate Forecasting and Covariates"
 - Reference Paper [Are Transformers Effective for Time Series Forecasting?(AAAI 2023)](https://arxiv.org/pdf/2205.13504.pdf)
 
+## Cautions
+- My implementation is primarily tailored for an AI challenge. Please feel free to modify it to better suit your specific needs.
+- The DLinear.py is inspired by [Darts](https://unit8co.github.io/darts/). It's the core component of this project, so I highly recommend taking a closer look!
 
 ## LTSF-Linear Family
 ![image](./pics/Linear.png)
