@@ -7,7 +7,7 @@ import torch.nn as nn
 
 def train(model, optimizer, scheduler, train_loader, val_loader, device, config):
     model.to(device)
-    criterion = nn.MSELoss().to(device)
+    criterion = nn.HuberLoss().to(device)
     best_loss = 9999999
     best_model = None
 
@@ -41,6 +41,7 @@ def train(model, optimizer, scheduler, train_loader, val_loader, device, config)
                 model_file_name = f"{epoch}_DLinear.pth"
                 full_path = os.path.join(model_save_path, model_file_name)
                 torch.save(best_model.state_dict(), full_path)
+                print('Model Weights Saved')
         scheduler.step()
         
     return best_model

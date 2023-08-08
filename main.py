@@ -46,9 +46,8 @@ def main(config):
     test_loader = DataLoader(test_dataset, batch_size = config['batch_size'], shuffle=False, num_workers=0)
 
     model = DLinearModel(config, shared_weights=False, const_init=True)
-    lambda1 = lambda epoch: 0.95 ** epoch
-    optimizer = torch.optim.Adam(params = model.parameters(), lr = config["learning_rate"])
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=[lambda1])
+    optimizer = torch.optim.AdamW(params = model.parameters(), lr = config["learning_rate"])
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, cooldown=5)
     infer_model = train(model, optimizer, scheduler, train_loader, val_loader, device, config)
 
     pred = inference(infer_model, test_loader, device)
@@ -56,7 +55,7 @@ def main(config):
         pred[idx, :] = pred[idx, :] * (scale_max_dict[idx] - scale_min_dict[idx]) + scale_min_dict[idx]
     pred = np.round(pred, 0).astype(int)
     submit_data.iloc[:, 1:] = pred
-    submit_data.to_csv(config["submision_path"], index=False)
+    submit_data.to_csv(config["submission_path"], index=False)
 
     ## visualize
     past_sales = pd.read_csv("./data/train.csv").drop(columns=['ID','대분류','중분류','소분류','브랜드','제품'])
@@ -64,7 +63,6 @@ def main(config):
 
     for i in range(0,10):
         plot_sales_and_predictions(past_sales_data[i], pred[i], start_date="2023-01-01", end_date="2023-04-26")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -80,7 +78,7 @@ if __name__ == "__main__":
     parser.add_argument("--future_cov_dim", type=int, default=3)
     parser.add_argument("--static_cov_dim", type=int, default=4)
     parser.add_argument("--kernel_size", type=int, default=25)
-    parser.add_argument("--lr", type=int, default=1e-4)
+    parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--model_save_path", default="./best_model/")
     parser.add_argument("--data_path", default="./data/")
