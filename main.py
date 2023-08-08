@@ -1,9 +1,9 @@
-import DLinear
-from DLinear.utils import seed_everything
-from DLinear.train import train
-from DLinear.predict import inference
-from DLinear.model import DLinearModel
-from DLinear.visualizer import plot_sales_and_predictions
+import Linear
+from Linear.utils import seed_everything
+from Linear.train import train
+from Linear.predict import inference
+from Linear.DLinear import DLinearModel
+from Linear.visualizer import plot_sales_and_predictions
 
 import pandas as pd
 import numpy as np
@@ -26,28 +26,29 @@ def main(config):
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("mps")
     seed_everything(config)
-    train_data, sales_data, submit_data = DLinear.read_data(config)
+    train_data, sales_data, submit_data = Linear.read_data(config)
 
-    train_x_past, train_x_future, train_x_static, train_x_target = DLinear.make_train_data(train_data, sales_data, config)
-    test_x_past, test_x_future, test_x_static = DLinear.make_test_data(train_data, sales_data, submit_data, config)
+    train_x_past, train_x_future, train_x_static, train_x_target = Linear.make_train_data(train_data, sales_data, config)
+    test_x_past, test_x_future, test_x_static = Linear.make_test_data(train_data, sales_data, submit_data, config)
 
-    train_x_past, val_x_past = DLinear.split_data(train_x_past)
-    train_x_future, val_x_future = DLinear.split_data(train_x_future)
-    train_x_static, val_x_static = DLinear.split_data(train_x_static)
-    train_x_target, val_x_target = DLinear.split_data(train_x_target)
+    train_x_past, val_x_past = Linear.split_data(train_x_past)
+    train_x_future, val_x_future = Linear.split_data(train_x_future)
+    train_x_static, val_x_static = Linear.split_data(train_x_static)
+    train_x_target, val_x_target = Linear.split_data(train_x_target)
 
-    train_dataset = DLinear.CustomDataset(train_x_past, train_x_future, train_x_static, train_x_target)
+    train_dataset = Linear.CustomDataset(train_x_past, train_x_future, train_x_static, train_x_target)
     train_loader = DataLoader(train_dataset, batch_size = config['batch_size'], shuffle=True, num_workers=0)
 
-    val_dataset = DLinear.CustomDataset(val_x_past, val_x_future, val_x_static, val_x_target)
+    val_dataset = Linear.CustomDataset(val_x_past, val_x_future, val_x_static, val_x_target)
     val_loader = DataLoader(val_dataset, batch_size = config['batch_size'], shuffle=False, num_workers=0)
 
-    test_dataset = DLinear.CustomDataset(test_x_past, test_x_future, test_x_static, None)
+    test_dataset = Linear.CustomDataset(test_x_past, test_x_future, test_x_static, None)
     test_loader = DataLoader(test_dataset, batch_size = config['batch_size'], shuffle=False, num_workers=0)
 
     model = DLinearModel(config, shared_weights=False, const_init=True)
     optimizer = torch.optim.AdamW(params = model.parameters(), lr = config["learning_rate"])
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, cooldown=5)
+    lambdax = lambda epoch: 0.95 ** epoch
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=[lambdax])
     infer_model = train(model, optimizer, scheduler, train_loader, val_loader, device, config)
 
     pred = inference(infer_model, test_loader, device)

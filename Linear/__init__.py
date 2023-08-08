@@ -1,5 +1,5 @@
 from .dataset import *
-from .model import *
+from .DLinear import *
 from .train import *
 from .eval import *
 from .predict import *
