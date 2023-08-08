@@ -42,4 +42,8 @@ LTSF_DLinear
 ```bash
 python ./Linear/main.py
 ```
+or giving options (options in main.py)  
+```bash
+python ./Linear/main.py --num_epochs 100 --input_chunk_length 210 --lr 1e-4
+```
 
