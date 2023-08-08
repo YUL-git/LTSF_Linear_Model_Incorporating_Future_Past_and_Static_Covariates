@@ -149,11 +149,11 @@ class DLinearModel(nn.Module):
 
             x = seasonal_output + trend_output
 
-            # extract nr_params
-            x = x.view(batch, self.output_dim, self.output_chunk_length, self.nr_params)
+            x = x.view(batch, self.output_dim, self.output_chunk_length)
 
             # permute back to (batch, out_len, out_dim, nr_params)
-            x = x.permute(0, 2, 1, 3)
+            x = x.permute(0, 2, 1)
+            x = torch.squeeze(x, dim=2)
         
         else:
             res, trend = self.decomposition(x)
