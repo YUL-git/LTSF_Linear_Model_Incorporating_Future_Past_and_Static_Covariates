@@ -17,3 +17,19 @@ Although LTSF-Linear is simple, it has some compelling characteristics:
 * High-efficiency: As each branch has only one linear layer, it costs much lower memory and fewer parameters and has a faster inference speed than existing Transformers.
 * Interpretability: After training, we can visualize weights to have some insights on the predicted values.
 Easy-to-use: LTSF-Linear can be obtained easily without tuning model hyper-parameters.
+
+## Files  
+```bash
+LTSF_DLinear  
+│  
+├── DLinear/             # DLinear files  
+│   ├── __init__.py      # Main script  
+│   ├── dataset.py       # preprocessing datasets  
+│   ├── eval.py          # evaluation function  
+│   ├── model.py         # DLinear model  
+│   ├── predict.py       # predict function for submission  
+│   ├── train.py         # train DLinear model  
+│   └── visualizer.py    # visualize time series forecasting  
+│  
+└── main.py              # run for following parser you select
+```  
